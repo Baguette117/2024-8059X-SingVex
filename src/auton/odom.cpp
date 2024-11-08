@@ -6,11 +6,9 @@ bool odomEnable = true;
 
 void odomTracker(void *ignore){
     #ifdef DEBUGODOM
+    Controller master(CONTROLLER_MASTER);
     printf("Odom tracker started\n");
     #endif
-    
-    Controller master(CONTROLLER_MASTER);
-    master.clear();
 
     //Rotating vector
     double odomRotationAngle;
@@ -42,18 +40,17 @@ void odomTracker(void *ignore){
             if (odomDeltaAngle != 0){
                 odomRadius = odomDeltaInchesRight/odomDeltaAngle + rightDist;
 
-                localX = odomRadius - odomRadius*cos(odomDeltaAngle);
+                localX = odomRadius * (1 - cos(odomDeltaAngle));
                 localY = sin(odomDeltaAngle)*odomRadius;
 
-                globalDeltaX = localX*cos(odomRotationAngle) - localY*sin(odomRotationAngle);
-                globalDeltaY = localX*sin(odomRotationAngle) + localY*cos(odomRotationAngle);
             } else {
                 localX = 0;
                 localY = (odomDeltaPosLeft + odomDeltaPosRight)/2;
                 
-                globalDeltaX = localX*cos(odomRotationAngle) - localY*sin(odomRotationAngle);
-                globalDeltaY = localX*sin(odomRotationAngle) + localY*cos(odomRotationAngle);
             }
+
+            globalDeltaX = localX*cos(odomRotationAngle) - localY*sin(odomRotationAngle);
+            globalDeltaY = localX*sin(odomRotationAngle) + localY*cos(odomRotationAngle);
 
             odomGlobalX += globalDeltaX;
             odomGlobalY += globalDeltaY;
@@ -61,16 +58,15 @@ void odomTracker(void *ignore){
             odomPrevPosLeft = odomPosLeft;
             odomPrevPosRight = odomPosRight;
             odomPrevAngle = odomAngle;
-            if (!((++counter)%1)){
+            
+            #ifdef DEBUGODOM
+            if (++counter%10){
                 master.print(0, 0, "%f %f", odomGlobalX, odomGlobalY);
                 master.print(1, 0, "%f", sensorsBearing);
             }
 
-            #ifdef DEBUGODOM
-            printf("Δx: %f, Δy: %f\ngΔx: %f, gΔy: %f\nx: %f, y: %f\n", localX, localY, globalDeltaY, globalDeltaX, odomGlobalX, odomGlobalY);
+            printf("Δx: %.20f, Δy: %.20f\ngΔx: %.20f, gΔy: %.20f\nx: %.20f, y: %.20f\n", localX, localY, globalDeltaY, globalDeltaX, odomGlobalX, odomGlobalY);
             #endif
-            
-
         }
     }
 

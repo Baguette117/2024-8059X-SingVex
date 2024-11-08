@@ -16,8 +16,6 @@ void controlPID(void *ignore){
     Motor rightFront(rightFrontPort, rightFrontGearset, rightFrontEncoder);
     Motor rightMid(rightMidPort, rightMidGearset, rightMidEncoder);
     Motor rightBack(rightBackPort, rightBackGearset, rightBackEncoder);
-    Controller master (CONTROLLER_MASTER);
-    master.clear();
 
     double deltaLeft, deltaRight;
 
@@ -31,7 +29,8 @@ void controlPID(void *ignore){
     while(true){
         if (controlPIDEnable && !sensorsCalibrating){
             if (controlTurnMode){
-                controlErrorBearing = boundDeg(controlTargBearing - sensorsBearing) - ((controlTurnClockwise)? 0 : 360);
+                controlErrorBearing = boundDeg(controlTargBearing - sensorsBearing);
+                if (controlErrorBearing > 180) controlErrorBearing -= 360 ;
                 controlDerivBearing = controlErrorBearing - controlPrevErrorBearing;
 
                 controlTargPowLeft = controlErrorBearing*controlTurnKP + controlDerivBearing*controlTurnKD;
@@ -40,7 +39,7 @@ void controlPID(void *ignore){
                     controlTargPowLeft = absadd(controlTargPowLeft, controlTurnKI);
                 }
 
-                controlTargRight = -controlTargPowLeft;
+                controlTargPowRight = -controlTargPowLeft;
 
                 controlPrevErrorBearing = controlErrorBearing;
             } else {
@@ -147,12 +146,11 @@ void controlMove(double inches, double kp, double kd, double ki){
     printf("controlMove | inches: %f\n", inches);
     #endif
 
-
     controlKP = kp;
     controlKD = kd;
     controlKI = ki;
     controlTargLeft = sensorsPosLeft + inches*degPerInch;
-    controlTargRight += sensorsPosRight + inches*degPerInch;
+    controlTargRight = sensorsPosRight + inches*degPerInch;
 }
 
 void controlTurn(double degrees, double kp, double kd, double ki){
@@ -172,9 +170,9 @@ void controlTurn(double degrees, double kp, double kd, double ki){
 
 
 //absolute movements
-void controlMoveTo(bool backwards, double x, double y, double kp, double kd, double ki){
+void controlMoveToPoint(bool backwards, double x, double y, double kp, double kd, double ki){
     #ifdef DEBUGCONTROL
-    printf("controlMove2 | x: %f\ty: %f\n", x, y);
+    printf("controlMoveToPoint | x: %f\ty: %f\n", x, y);
     #endif
 
     double diffX = x - odomGlobalX, diffY = y - odomGlobalY;

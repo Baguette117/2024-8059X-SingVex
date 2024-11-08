@@ -1,8 +1,11 @@
 #ifndef _ODOM_
 #define _ODOM_
 
-#define degPerInch 27.779771885
-#define degPerDeg 2.848484
+//measurements
+#define degPerInch 66.8450761
+#define degPerDeg 7
+#define rightDist 6.5
+#define leftDist 6.5
 
 //odom task
 void odomTracker(void* ignore);

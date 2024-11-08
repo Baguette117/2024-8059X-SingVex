@@ -11,7 +11,8 @@
  *  returns true if the path was completed successfully
 */
 bool calibration(int path);
-
-extern bool autonwl, autonwr;
+bool redMinus();
+bool redPlus();
+bool blueMinus();
 
 #endif

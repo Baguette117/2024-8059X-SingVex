@@ -20,32 +20,32 @@ static void buttonMatrixEventListener(lv_event_t* e) {
             selectedPath = calibrationPath;
             break;
         case 1:
-            lv_label_set_text(pathLabel, "redFar");
-            selectedPath = redFar;
+            lv_label_set_text(pathLabel, "redMinus");
+            selectedPath = redMinusPath;
             break;
         case 2:
-            lv_label_set_text(pathLabel, "redNear");
-            selectedPath = redNear;
+            lv_label_set_text(pathLabel, "redPlus");
+            selectedPath = redPlusPath;
             break;
         case 3:
             lv_label_set_text(pathLabel, "redAWP");
-            selectedPath = redAWP;
+            selectedPath = redAWPPath;
             break;
         case 4:
             lv_label_set_text(pathLabel, "skills");
             selectedPath = skillsPath;
             break;
         case 5:
-            lv_label_set_text(pathLabel, "blueFar");
-            selectedPath = blueFar;
+            lv_label_set_text(pathLabel, "blueMinus");
+            selectedPath = blueMinusPath;
             break;
         case 6:
-            lv_label_set_text(pathLabel, "blueNear");
-            selectedPath = blueNear;
+            lv_label_set_text(pathLabel, "bluePlus");
+            selectedPath = bluePlusPath;
             break;
         case 7:
             lv_label_set_text(pathLabel, "blueAWP");
-            selectedPath = blueAWP;
+            selectedPath = blueAWPPath;
             break;
     }
 
@@ -55,8 +55,8 @@ static void buttonMatrixEventListener(lv_event_t* e) {
 void initButtonMatrix(void) {
     // Create a button descriptor string array w/ no repeat "\224"
     static const char* buttonMap[] = {
-        "calibration", "redFar", "redNear", "redAWP", "\n",
-        "skills", "blueFar", "blueNear", "blueAWP", NULL };
+        "calibration", "redMinus", "redPlus", "redAWP", "\n",
+        "skills", "blueMinus", "bluePlus", "blueAWP", NULL };
 
     // Create a default button matrix* no repeat
     buttonMatrix = lv_btnmatrix_create(lv_scr_act());

@@ -1,9 +1,9 @@
 #ifndef _DEBUG_
 #define _DEBUG_
 
-#define DEBUGCONTROL
+// #define DEBUGCONTROL
 #define DEBUGODOM
-#define DEBUGSENSORS
+// #define DEBUGSENSORS
 
 //debug task
 void debugTerminal(void* ignore);

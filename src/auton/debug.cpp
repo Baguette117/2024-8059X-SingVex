@@ -4,10 +4,10 @@ int debugMode = 0b00000000;
 int interval = 20;
 
 void debugTerminal(void* ignore){
-    Imu inertial(inertialPort);
     Controller master(CONTROLLER_MASTER);
 
     printf("Debug task started\n");
+    master.clear();
     while(true){
         if (sensorsCalibrating){
             printf("Inertial is calibrating\n");

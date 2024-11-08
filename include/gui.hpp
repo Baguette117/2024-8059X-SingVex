@@ -3,13 +3,13 @@
 
 typedef enum {
     calibrationPath = 0,
-    redFar = 1,
-    redNear = 2,
-    redAWP = 3,
-    skillsPath = 4,
-    blueFar = 5,
-    blueNear = 6,
-    blueAWP = 7
+    redMinusPath,
+    redPlusPath,
+    redAWPPath,
+    skillsPath,
+    blueMinusPath,
+    bluePlusPath,
+    blueAWPPath
 } autonPaths;
 extern autonPaths selectedPath;
 void initButtonMatrix();

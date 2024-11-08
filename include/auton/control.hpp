@@ -1,15 +1,15 @@
 #ifndef _CONTROL_
 #define _CONTROL_
 
-#define defaultKP .3
+#define defaultKP .155
 #define defaultKD 2
-#define defaultKI 4
-#define defaultTurnKP .4
-#define defaultTurnKD 3
-#define defaultTurnKI 5
+#define defaultKI 0
+#define defaultTurnKP 1.5
+#define defaultTurnKD 1.3
+#define defaultTurnKI 0
 #define defaultRampingMax 2
 #define defaultDistanceTolerance 25
-#define defaultBearingTolerance 20
+#define defaultBearingTolerance 3
 #define defaultVelocityTolerance 2.4
 #define defaultSpeedCap 120
 
@@ -25,7 +25,7 @@ void controlMove(double inches, double kp = defaultKP, double kd = defaultKD, do
 void controlTurn(double degrees, double kp = defaultTurnKP, double kd = defaultTurnKD, double ki = defaultTurnKI);
 
 //absolute movements
-void controlMoveTo(bool backwards, double x, double y, double kp = defaultKP, double kd = defaultKD, double ki = defaultKI);
+void controlMoveToPoint(bool backwards, double x, double y, double kp = defaultKP, double kd = defaultKD, double ki = defaultKI);
 void controlTurnTo(double bearing, double kp = defaultTurnKP, double kd = defaultTurnKD, double ki = defaultTurnKI);
 void controlTurnToPoint(bool backwards, double x, double y, double kp = defaultTurnKP, double kd = defaultTurnKD, double ki = defaultTurnKI);
 void controlTurnClockwiseTo(double bearing, double kp = defaultTurnKP, double kd = defaultTurnKD, double ki = defaultTurnKI);

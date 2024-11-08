@@ -16,6 +16,7 @@ void initialize() {
 	Motor intake(intakePort, intakeGearset, intakeEncoder);
 	Motor chain(chainPort, chainGearset, chainEncoder);
 	adi::Pneumatics clamp(clampPort, false, false);
+	adi::Pneumatics sweeper(sweeperPort, false, false);
 	IMU inertial(inertialPort);
 
 	Controller master(CONTROLLER_MASTER);
@@ -60,23 +61,26 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	switch (calibrationPath){
+	switch (selectedPath){
 		case calibrationPath:
-			calibration(0);
+			calibration(1);
 			break;
-		case redFar:
+		case redMinusPath:
+			redMinus();
 			break;
-		case redNear:
+		case redPlusPath:
+			redPlus();
 			break;
-		case redAWP:
+		case redAWPPath:
 			break;
 		case skillsPath:
 			break;
-		case blueFar:
+		case bluePlusPath:
 			break;
-		case blueNear:
+		case blueMinusPath:
+			blueMinus();
 			break;
-		case blueAWP:
+		case blueAWPPath:
 			break;
 	}
 }
@@ -104,16 +108,21 @@ void opcontrol() {
 	Motor intake(intakePort);
 	Motor chain(chainPort);
 	adi::Pneumatics clamp(clampPort, false, false);
+	adi::Pneumatics sweeper(sweeperPort, false, false);
 	IMU inertial(inertialPort);
 
 	Controller master(CONTROLLER_MASTER);
 
 	int left, right;
-	bool invert = false, clampOn = false;
+	bool invert = false, clampOn = false, sweeperOn = false;
+	
+	Task autonSensorsTask(sensorsTracker, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Sensors Task");
+	Task autonOdomTask(odomTracker, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Odom Task");
+	Task autonDebugTask(debugTerminal, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Debug Task");
 
 	while (true) {
 		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
+		int right =  master.get_analog(ANALOG_RIGHT_Y);
 
 		if (invert){
 			leftFront.move(-right);
@@ -131,26 +140,25 @@ void opcontrol() {
 			rightBack.move(right);
 		}
 
-		if (master.get_digital(DIGITAL_R1)){
+		if (master.get_digital(DIGITAL_L1)){
 			intake.move(127);
-		} else if (master.get_digital(DIGITAL_R2)){
-			intake.move(-127);
-		} else {
-			intake.move(0);
-		}
-
-		if (master.get_digital(DIGITAL_R1)){
 			chain.move(127);
-		} else if (master.get_digital(DIGITAL_R2)){
+		} else if (master.get_digital(DIGITAL_L2)){
+			intake.move(-127);
 			chain.move(-127);
 		} else {
+			intake.move(0);
 			chain.move(0);
 		}
 
-		if (master.get_digital_new_press(DIGITAL_A)){
+		if (master.get_digital_new_press(DIGITAL_R1)){
 			clampOn = !clampOn;
 			clamp.toggle();
-			master.print(0, 0, "%s", clampOn ? "Clamp On" : "Clamp Off");
+		}
+
+		if (master.get_digital_new_press(DIGITAL_R2)){
+			sweeperOn = !sweeperOn;
+			sweeper.toggle();
 		}
 
 		delay(20);
