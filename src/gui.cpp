@@ -55,8 +55,8 @@ static void buttonMatrixEventListener(lv_event_t* e) {
 void initButtonMatrix(void) {
     // Create a button descriptor string array w/ no repeat "\224"
     static const char* buttonMap[] = {
-        "calibration", "redMinus", "redPlus", "redAWP", "\n",
-        "skills", "blueMinus", "bluePlus", "blueAWP", NULL };
+        "calibration", "redMinus", "redPlus", "X", "\n",
+        "X", "blueMinus", "bluePlus", "X", NULL };
 
     // Create a default button matrix* no repeat
     buttonMatrix = lv_btnmatrix_create(lv_scr_act());

@@ -14,5 +14,6 @@ bool calibration(int path);
 bool redMinus();
 bool redPlus();
 bool blueMinus();
+bool bluePlus();
 
 #endif

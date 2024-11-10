@@ -11,7 +11,7 @@
 #define leftMidEncoder pros::v5::MotorEncoderUnits::degrees
 
 //LeftBack
-#define leftBackPort -15
+#define leftBackPort -10
 #define leftBackGearset pros::v5::MotorGears::blue
 #define leftBackEncoder pros::v5::MotorEncoderUnits::degrees
 

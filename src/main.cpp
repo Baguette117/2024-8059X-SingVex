@@ -36,7 +36,10 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void disabled() {
+	adi::Pneumatics clamp(clampPort, false, false);
+	clamp.extend();
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -75,10 +78,11 @@ void autonomous() {
 			break;
 		case skillsPath:
 			break;
-		case bluePlusPath:
-			break;
 		case blueMinusPath:
 			blueMinus();
+			break;
+		case bluePlusPath:
+			bluePlus();
 			break;
 		case blueAWPPath:
 			break;
@@ -115,11 +119,9 @@ void opcontrol() {
 
 	int left, right;
 	bool invert = false, clampOn = false, sweeperOn = false;
-	
-	Task autonSensorsTask(sensorsTracker, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Sensors Task");
-	Task autonOdomTask(odomTracker, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Odom Task");
-	Task autonDebugTask(debugTerminal, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "Debug Task");
 
+	clamp.extend();
+	
 	while (true) {
 		int left = master.get_analog(ANALOG_LEFT_Y);
 		int right =  master.get_analog(ANALOG_RIGHT_Y);
